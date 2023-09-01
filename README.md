@@ -1,6 +1,6 @@
 # Linux
 
-* 강의 목표: 리시프, 운영체제 대바
+* 강의 목표: 리시프, 운영체제 대비
 * 일정: 3week
   * week1: section2
   * week2: section3
