@@ -7,6 +7,7 @@
 #define MAX_TRY 10000000
 
 int shared = 0;
+pthread_mutex_t mutex;
 
 void *child_thread_main(void *arg)
 {
@@ -14,12 +15,16 @@ void *child_thread_main(void *arg)
     printf("child pthread id %lu\n", pthread_self());
     
     for (i=0; i<MAX_TRY; i++){
+        pthread_mutex_lock(&mutex);
         shared++;
+        pthread_mutex_unlock(&mutex);
     }
     for (i=0; i<MAX_TRY; i++){
+        pthread_mutex_lock(&mutex);
         shared--;
+        pthread_mutex_unlock(&mutex);
     }
-    
+
     return NULL;
 }
 
@@ -28,6 +33,11 @@ int main(int argc, char **argv)
     int ret;
     pthread_t child_threads[2];
     
+    if(pthread_mutex_init(&mutex, NULL)){
+        printf("mutex init fail\n");
+        return -1;
+    }
+
     printf("main pthread id %lu\n", pthread_self());
     ret = pthread_create(&child_threads[0], NULL, child_thread_main, NULL);
     if(ret){
